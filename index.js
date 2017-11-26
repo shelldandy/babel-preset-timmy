@@ -66,56 +66,61 @@ if (env === 'development' || env === 'test') {
 }
 
 if (env === 'test') {
-  module.exports = {
-    presets: [
+  module.exports = function (api, opts) {
+    return {
+      presets: [
       // ES features necessary for user's Node version
-      [
-        require('@babel/preset-env').default,
-        {
-          targets: {
-            node: 'current'
+        [
+          require('@babel/preset-env').default,
+          {
+            targets: {
+              node: 'current'
+            }
           }
-        }
-      ],
+        ],
       // JSX, Flow
-      require.resolve('@babel/preset-react')
-    ],
-    plugins: plugins.concat([
+        require.resolve('@babel/preset-react')
+      ],
+      plugins: plugins.concat([
       // Compiles import() to a deferred require()
-      require.resolve('babel-plugin-dynamic-import-node-babel-7')
-    ])
+        require.resolve('babel-plugin-dynamic-import-node-babel-7')
+      ])
+    }
   }
 } else {
-  module.exports = {
-    presets: [
+  module.exports = function (api, opts) {
+    return {
+      presets: [
       // Latest stable ECMAScript features
-      [
-        require.resolve('@babel/preset-env'),
-        {
-          targets: {
-            browsers: BROWSERS
-          },
+        [
+          require.resolve('@babel/preset-env'),
+          {
+            targets: {
+              browsers: BROWSERS
+            },
           // Disable polyfill transforms
-          useBuiltIns: false,
+            useBuiltIns: false,
           // Do not transform modules to CJS
-          modules: false
-        }
-      ],
+            modules: false
+          }
+        ],
       // JSX, Flow
-      require.resolve('@babel/preset-react')
-    ],
-    plugins: plugins.concat([
-      // function* () { yield 42; yield 43; }
-      [
-        require.resolve('@babel/plugin-transform-regenerator'),
-        {
-          // Async functions are converted to generators by babel-preset-env
-          async: false
-        }
+        require.resolve('@babel/preset-react')
       ],
+      plugins: plugins.concat([
+      // function* () { yield 42; yield 43; }
+        [
+          require.resolve('@babel/plugin-transform-regenerator'),
+          {
+          // Async functions are converted to generators by babel-preset-env
+            async: false
+          }
+        ],
       // Adds syntax support for import()
-      require.resolve('@babel/plugin-syntax-dynamic-import')
-    ])
+        require.resolve('@babel/plugin-syntax-dynamic-import')
+      ])
+
+    }
   }
 
   if (env === 'production') {
