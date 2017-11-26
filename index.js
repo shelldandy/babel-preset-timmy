@@ -32,10 +32,10 @@ var env = process.env.BABEL_ENV || process.env.NODE_ENV;
 if (env !== 'development' && env !== 'test' && env !== 'production') {
   throw new Error(
     'Using `babel-preset-react-app` requires that you specify `NODE_ENV` or ' +
-      '`BABEL_ENV` environment variables. Valid values are "development", ' +
-      '"test", and "production". Instead, received: ' +
-      JSON.stringify(env) +
-      '.'
+    '`BABEL_ENV` environment variables. Valid values are "development", ' +
+    '"test", and "production". Instead, received: ' +
+    JSON.stringify(env) +
+    '.'
   );
 }
 
@@ -82,11 +82,16 @@ if (env === 'test') {
         require.resolve('@babel/preset-env'),
         {
           targets: {
-            // React parses on ie 9, so we should too
-            ie: 9,
-            // We currently minify with uglify
-            // Remove after https://github.com/mishoo/UglifyJS2/issues/448
-            uglify: true,
+            "browsers": [
+              "last 2 Chrome versions",
+              "last 2 ChromeAndroid versions",
+              "last 2 Firefox versions",
+              "last 2 Safari versions",
+              "last 2 ios versions",
+              "last 2 edge versions",
+              "last 2 ie versions",
+              "last 2 Opera versions"
+            ]
           },
           // Disable polyfill transforms
           useBuiltIns: false,
@@ -112,11 +117,8 @@ if (env === 'test') {
   };
 
   if (env === 'production') {
-    // Optimization: hoist JSX that never changes out of render()
-    // Disabled because of issues: https://github.com/facebookincubator/create-react-app/issues/553
-    // TODO: Enable again when these issues are resolved.
-    // plugins.push.apply(plugins, [
-    //   require.resolve('babel-plugin-transform-react-constant-elements')
-    // ]);
+    plugins.push.apply(plugins, [
+      require.resolve('@babel/plugin-transform-react-constant-elements')
+    ]);
   }
 }
