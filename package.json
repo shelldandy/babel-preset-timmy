@@ -1,6 +1,6 @@
 {
   "name": "babel-preset-timmy",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "babel recommendations by timmy burger",
   "main": "index.js",
   "repository": "mike3run/babel-preset-timmy",
